@@ -1,29 +1,113 @@
 import React, { useState, useEffect } from 'react';
 import BusMap from './BusMap';
 
-const BusTracker: React.FC = () => {
-  const [coordinates, setCoordinates] = useState({
-    latitude: 24.912188, // Starting point: 24°54'43.8"N 67°11'53.1"E
-    longitude: 67.198070,
-   
-  });
+interface Waypoint {
+  latitude: number;
+  longitude: number;
+  sequence: number;
+}
 
-  const route = [
-    { latitude:24.912188, longitude: 67.198070 }, // First point
-    { latitude: 24.9124, longitude: 67.1856 }, // Second point: 24°54'44.9"N 67°11'08.2"E
-  ];
+interface BusRoute {
+  id: number;
+  start: string;
+  end: string;
+  waypoints: Waypoint[];
+}
+
+interface Bus {
+  id: number;
+  coordinates: Waypoint;
+  currentSequence: number;
+  direction: 'forward' | 'backward';
+}
+
+const BusTracker: React.FC = () => {
+  const [buses, setBuses] = useState<Bus[]>([]);
+  const [routes, setRoutes] = useState<BusRoute[]>([]);
 
   useEffect(() => {
-    let index = 0;
-    const interval = setInterval(() => {
-      index = (index + 1) % route.length; // Loop through route
-      setCoordinates(route[index]);
-    }, 5000); // Update every 5 seconds
+    // Fetch routes from the backend
+    const fetchRoutes = async () => {
+      const response = await fetch('http://localhost:3000/api/routes');
+      const data = await response.json();
+      setRoutes(data.routes);
 
-    return () => clearInterval(interval);
+      // Initialize buses at the first waypoint of their route
+      const initializedBuses = data.routes.map((route: BusRoute) => ({
+        id: route.id,
+        coordinates: route.waypoints[0],
+        currentSequence: 0,
+        direction: 'forward' as const
+      }));
+
+      setBuses(initializedBuses);
+    };
+
+    fetchRoutes();
   }, []);
 
-  return <BusMap latitude={coordinates.latitude} longitude={coordinates.longitude} />;
+  useEffect(() => {
+    const intervals: NodeJS.Timeout[] = [];
+
+    buses.forEach((bus) => {
+      const route = routes.find((route) => route.id === bus.id);
+      if (!route) return;
+
+      const waypoints = route.waypoints;
+      let currentSequence = bus.currentSequence;
+      let direction = bus.direction;
+
+      // Time interval for moving between waypoints
+      const intervalTime = (30 * 60 * 1000) / waypoints.length;
+
+      const interval = setInterval(() => {
+        // Determine next sequence and direction
+        if (direction === 'forward') {
+          if (currentSequence < waypoints.length - 1) {
+            currentSequence++;
+          } else {
+            // Change direction to backward when reaching the end
+            direction = 'backward';
+            currentSequence--;
+          }
+        } else {
+          if (currentSequence > 0) {
+            currentSequence--;
+          } else {
+            // Change direction to forward when reaching the start
+            direction = 'forward';
+            currentSequence++;
+          }
+        }
+
+        setBuses((prevBuses) =>
+          prevBuses.map((b) =>
+            b.id === bus.id
+              ? {
+                  ...b,
+                  coordinates: waypoints[currentSequence],
+                  currentSequence,
+                  direction
+                }
+              : b
+          )
+        );
+      }, intervalTime);
+
+      intervals.push(interval);
+    });
+
+    // Cleanup intervals
+    return () => {
+      intervals.forEach((id) => clearInterval(id));
+    };
+  }, [buses, routes]);
+
+  return (
+    <div>
+      <BusMap buses={buses} />
+    </div>
+  );
 };
 
 export default BusTracker;
