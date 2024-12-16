@@ -764,6 +764,44 @@ const routes = [
       },
     ],
   },
+
+                         //EV Bus route
+  {
+    id: 13,
+    start: "CMH Malir",
+    end: "Abdullah Shah Ghazi",
+    distance_km: 41,
+    start_location: { 
+      latitude: 24.950289,
+      longitude: 67.215504,
+    },
+    end_location: { 
+      latitude:24.810337,
+      longitude: 67.031572,
+    },
+    waypoints: [
+      { latitude: 24.931027, longitude:  67.204651, sequence: 1 },
+      { latitude: 24.913417, longitude: 67.198537, sequence: 2 }, 
+      { latitude: 24.905300, longitude:  67.182483, sequence: 3 },
+      { latitude: 24.897460,longitude:67.179809, sequence: 4 }, 
+      { latitude: 24.891631, longitude: 67.168515, sequence: 5 }, 
+      { latitude: 24.886872, longitude: 67.155828, sequence: 6 }, 
+      { latitude: 24.880592, longitude:  67.109657, sequence: 7 },
+      { latitude: 24.860172, longitude: 67.062528, sequence: 8 }, 
+      { latitude: 24.850146, longitude:  67.053656, sequence: 9 },
+      { latitude: 24.836069,  longitude: 67.069711, sequence: 10 },
+
+      { latitude: 24.832792, longitude: 67.073847, sequence: 11 }, 
+      { latitude: 24.822331, longitude: 67.075180, sequence: 12 }, 
+      { latitude: 24.809754, longitude: 67.076830, sequence: 13 }, 
+      { latitude: 24.798603, longitude: 67.073905, sequence: 14 }, 
+      { latitude: 24.790789,longitude: 67.066415, sequence: 15 }, 
+      { latitude: 24.778500, longitude:  67.054541, sequence: 16 },
+      { latitude: 24.798488,longitude: 67.036176, sequence: 17 }, 
+      { latitude: 24.810337, longitude: 67.031572, sequence: 18 },//
+     
+    ],
+  },
 ];
 
 export function getRoutes() {
