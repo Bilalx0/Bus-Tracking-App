@@ -1,15 +1,23 @@
-// imports
+// Imports
 import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
-//import { Server } from "socket.io";
 import { createServer } from "node:http";
-import busesRouter from "./routes/Buses.route.js"
+import busesRouter from "./routes/Buses.route.js";
 
 config();
 
 const app = express();
 const server = createServer(app);
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// API Routes
+app.use("/api", busesRouter()); // Ensure this handles your bus routes properly
+
+// Uncomment for WebSocket functionality if needed in the future
 /*
 const io = new Server(server, {
     cors: {
@@ -17,26 +25,23 @@ const io = new Server(server, {
         methods: ["GET", "POST"]
     }
 })
-*/
 
-app.use(cors());
-app.use("/api", busesRouter())
-//app.use(express.json());
-
-/*
-io.on("connection", (socket)=>{
-    console.log(`a user connection ${socket.id}`)
+io.on("connection", (socket) => {
+    console.log(`A user connected: ${socket.id}`);
 
     // Start tracking the location:
     socket.on("update-location", (data) => {
-      const {latitude,longitude} = data;
-      console.log(latitude,longitude);
-    })
+        const { latitude, longitude } = data;
+        console.log(latitude, longitude);
+    });
 
-    socket.on("disconnect", ()=>{
-      console.log(socket.id, "left")  
-    })
-})
+    socket.on("disconnect", () => {
+        console.log(`${socket.id} left`);
+    });
+});
 */
 
-server.listen(process.env.PORT || 3000, () => console.log(`Listening on port ${process.env.PORT || 3000}.`));
+// Server listening
+server.listen(process.env.PORT || 3000, () =>
+  console.log(`Listening on port ${process.env.PORT || 3000}.`)
+);
