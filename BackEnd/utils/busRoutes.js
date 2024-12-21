@@ -442,7 +442,11 @@ const routes = [
         latitude: 24.863384,
         longitude: 67.025246,
       },
-      { sequence: 5, name: "Regal", latitude: 24.860571, longitude: 67.026124 },
+      { sequence: 5, 
+        name: "Regal", 
+        latitude: 24.860571, 
+        longitude: 67.026124 
+      },
       {
         sequence: 6,
         name: "Zainab Market",
@@ -767,6 +771,7 @@ const routes = [
 
                          //EV Bus route
   {
+    //Ev-1
     id: 13,
     start: "CMH Malir",
     end: "Abdullah Shah Ghazi",
@@ -800,6 +805,38 @@ const routes = [
       { latitude: 24.798488,longitude: 67.036176, sequence: 17 }, 
       { latitude: 24.810337, longitude: 67.031572, sequence: 18 },//
      
+    ],
+  },
+  {     
+    //EV-3
+    id: 15,
+    start: "Malir CP-5",
+    end: "Numaish",
+    distance_km: 41,
+    start_location: {  
+      latitude: 24.946711,
+      longitude: 67.181477,
+    },
+    end_location: { 
+      latitude:24.872538,
+      longitude: 67.035936,
+    },
+    waypoints: [
+      { latitude: 24.946711, longitude:  67.181477, sequence: 1 },
+      { latitude: 24.942478, longitude: 67.172319, sequence: 2 },  
+      { latitude: 24.938757, longitude:   67.154151, sequence: 3 },
+      { latitude: 24.935678,longitude: 67.138437, sequence: 4 }, 
+      { latitude: 24.921253, longitude: 67.135331, sequence: 5 },  
+      { latitude: 24.909752, longitude: 67.122299, sequence: 6 }, 
+      { latitude:24.904211,  longitude:  67.113927, sequence: 7 },
+      { latitude: 24.901109, longitude: 67.112392, sequence: 8 },  
+      { latitude: 24.898027, longitude:  67.104000, sequence: 9 }, 
+      { latitude: 24.894147,   longitude: 67.088113, sequence: 10 },
+      { latitude:  24.889617,  longitude: 67.067670, sequence: 11 },
+      { latitude: 24.886569, longitude:  67.058265, sequence: 12 }, 
+      { latitude: 24.879356, longitude: 67.047592, sequence: 13 },  
+      { latitude:24.876990, longitude: 67.043055, sequence: 14 }, 
+      { latitude: 24.872538, longitude:  67.035936, sequence: 15 }, 
     ],
   },
 ];
